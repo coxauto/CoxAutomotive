@@ -1,0 +1,136 @@
+
+<!DOCTYPE HTML>
+<html ng-app="BmWatsonApp">
+    	<head>
+    		<meta charset="UTF-8">
+    		<title>CoxAutomotive</title>
+    		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    		<!--
+    			<link rel="shortcut icon" href="images/favicon.png">
+    			<link rel="apple-touch-icon" href="images/apple-touch-icon.png"> 
+    		-->
+            <script src="js/mobileData.js"></script>
+            <script src="js/initOptions.js"></script>
+            <script src="js/main.js"></script>
+            <script src="js/messages.js"></script>
+            
+
+            <script src="lib/IBMBluemix.js"></script>
+            <script src="lib/IBMData.js"></script>
+
+            <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+            <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+            <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+            
+            <script type="text/javascript" src="lib/angular.js"></script>
+            <script type="text/javascript" src="lib/angular-route.js"></script>
+            <script type="text/javascript" src="lib/angular-resource.js"></script>
+
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    		<link rel="stylesheet" href="css/main.css">
+            
+            <!--<script src="js/controllers/WatsonController.js"></script>
+            <script src="js/services/WatsonServices.js"></script>
+            -->
+    		<!--<script>window.$ = window.jQuery = WLJQ;</script>-->
+            <script type="text/javascript">
+                /*console.log("GET IBM DATA Service ... ");
+                var data = IBMData.getService();
+                console.log("IBM DATA Service acquired!!");*/
+                /*var query = data.Query.ofType("Item");
+                query.find().then(function(items) {
+                    console.log("ITEMS: " + JSON.stringify(items));
+                }, function(err) {
+                    console.log("ERROR in GETTING ITEMS");
+                });*/
+                $(document).on('pageinit pageshow', 'div:jqmData(role="page")', function(event) {
+                    $("#btnGetItem").unbind("click").bind("click", function(event) {
+                        console.log("BUTTON GET ITEM is CLICKED");
+                        listItem();
+                    });
+
+                    $("#btnAskWatson").unbind("click").bind("click", function(event) {
+                        console.log("BUTTON ASK WATSON is CLICKED");
+                        watson_qa_inquiry();
+                    });
+
+                    //var mobileData = {
+
+                        listItem = function() {
+                            console.log("GETTING ALL ITEMS");
+
+                            $.ajax({
+                                type: "GET",
+                                url: "http://as-bm-watson.mybluemix.net/listItem"
+                            })
+                            .done(function(data) {
+                                console.log("LIST ITEM DATA: " + JSON.stringify(data));
+                            });    
+
+                            // Retrieve a Query instance of type "Item" and issue a find() action on it 
+                            // to retrieve all the items (NO PAGING)
+                            /*var data = IBMData.getService();
+                            var query = data.Query.ofType("Item");
+                            query.find().done(function(items) {
+                                console.log("API-LISTITEMS: " + JSON.stringify(items));
+                            },function(err){
+                                console.log("ERROR IN RETRIEVING ITEMS")
+                            });*/
+                        };
+
+                        watson_qa_inquiry = function() {
+                            var criteria = {
+                                dataset: "travel",
+                                questionText: "Where to go in Seattle?"
+                            }
+                            console.log("/**** WATSON QUESTIONS AND ANSWER ****/ - CRITERIA: " + JSON.stringify(criteria));
+
+                            $.ajax({
+                                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                                type: "POST",
+                                url: "http://as-bm-watson.mybluemix.net/api/watson-qa",
+                                data: "dataset="+criteria.dataset+"&questionText="+criteria.questionText
+                            })
+                            .done(function(data) {
+                                console.log("WATSON-QA RESPONSE: " + JSON.stringify(data));
+                            })
+                            .fail(function(err) {
+                                console.log("WATSON-QA ERROR: " + JSON.stringify(err));
+                            })    
+                        }
+
+
+
+                        
+                    //}
+
+                    
+                });
+            </script>
+    	</head>
+    	<body style="display: none;">
+    		<!--application UI goes here-->
+            <input type="button" id="btnGetItem" name="btnGetItem" value="Get Item">
+            <input type="button" id="btnAskWatson" name="btnAskWatson" value="Ask Watson" ng-click="askWatson_QuestionAnswer()">
+
+            <div id="pageLogin" data-role="page">
+                <div data-role="content">
+                    <div style="padding-left:100px; padding-top:100px">
+                        <img src="images/cox-automotive-logo.jpg">
+                    </div>
+                    
+                    <div class="col-md-6" style="padding-left:400px">
+                        <form>
+                            <input type="text" id="txtLogin" name="txtLogin" class="form-control" placeholder="Enter your username">
+                            <input type="password" id="txtPassword" name="txtPassword" placeholder="Enter your password">
+                            <input type="button" id="btnLogin" value="Sign In" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>                
+            </div>
+
+        </body>
+</html>
