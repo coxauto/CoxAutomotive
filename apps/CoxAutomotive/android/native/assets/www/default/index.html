@@ -1,4 +1,4 @@
-<!DOCTYPE HTML><html ng-app="BmWatsonApp">
+<!DOCTYPE HTML><html>
     <head>
         <meta charset="UTF-8">
         <title>CoxAutomotive</title>
@@ -34,102 +34,130 @@
             <script src="js/initOptions.js"></script>
             <script src="js/main.js"></script>
             <script src="js/messages.js"></script>
+            <script src="js/mobileData.js" type="text/javascript"></script>
+            <script src="js/watsonServices.js" type="text/javascript"></script>
             <script src="lib/IBMBluemix.js"></script>
             <script src="lib/IBMData.js"></script>
         <link href="worklight/worklight.css" rel="stylesheet">
         <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet">
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
             <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-            <script src="lib/angular.js" type="text/javascript"></script>
-            <script src="lib/angular-route.js" type="text/javascript"></script>
-            <script src="lib/angular-resource.js" type="text/javascript"></script>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css" rel="stylesheet">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-        <link href="css/main.css" rel="stylesheet">
-            <!--<script src="js/controllers/WatsonController.js"></script>
-            <script src="js/services/WatsonServices.js"></script>
+            <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
             -->
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+            --&gt;
     		<!--<script>window.$ = window.jQuery = WLJQ;</script>-->
-        <script type="text/javascript">
-                /*console.log("GET IBM DATA Service ... ");
-                var data = IBMData.getService();
-                console.log("IBM DATA Service acquired!!");*/
-                /*var query = data.Query.ofType("Item");
-                query.find().then(function(items) {
-                    console.log("ITEMS: " + JSON.stringify(items));
-                }, function(err) {
-                    console.log("ERROR in GETTING ITEMS");
-                });*/
+            <script type="text/javascript">
                 $(document).on('pageinit pageshow', 'div:jqmData(role="page")', function(event) {
-                    $("#btnGetItem").unbind("click").bind("click", function(event) {
-                        console.log("BUTTON GET ITEM is CLICKED");
-                        listItem();
-                    });
+                    <!-- // **** CLICK HANDLERS ****//-->
                     $("#btnAskWatson").unbind("click").bind("click", function(event) {
                         console.log("BUTTON ASK WATSON is CLICKED");
-                        watson_qa_inquiry();
+                        watson.qa_inquiry();
                     });
-                    //var mobileData = {
-                        listItem = function() {
-                            console.log("GETTING ALL ITEMS");
-                            $.ajax({
-                                type: "GET",
-                                url: "http://as-bm-watson.mybluemix.net/listItem"
-                            })
-                            .done(function(data) {
-                                console.log("LIST ITEM DATA: " + JSON.stringify(data));
-                            });    
-                            // Retrieve a Query instance of type "Item" and issue a find() action on it 
-                            // to retrieve all the items (NO PAGING)
-                            /*var data = IBMData.getService();
-                            var query = data.Query.ofType("Item");
-                            query.find().done(function(items) {
-                                console.log("API-LISTITEMS: " + JSON.stringify(items));
-                            },function(err){
-                                console.log("ERROR IN RETRIEVING ITEMS")
-                            });*/
-                        };
-                        watson_qa_inquiry = function() {
-                            var criteria = {
-                                dataset: "travel",
-                                questionText: "Where to go in Seattle?"
-                            }
-                            console.log("/**** WATSON QUESTIONS AND ANSWER ****/ - CRITERIA: " + JSON.stringify(criteria));
-                            $.ajax({
-                                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-                                type: "POST",
-                                url: "http://as-bm-watson.mybluemix.net/api/watson-qa",
-                                data: "dataset="+criteria.dataset+"&questionText="+criteria.questionText
-                            })
-                            .done(function(data) {
-                                console.log("WATSON-QA RESPONSE: " + JSON.stringify(data));
-                            })
-                            .fail(function(err) {
-                                console.log("WATSON-QA ERROR: " + JSON.stringify(err));
-                            })    
-                        }
-                    //}
+                    $("#btnSignIn").unbind("click").bind("click", function(event) {
+                        console.log("BUTTON SIGN IN is CLICKED");
+                        mobileData.verifyUser();
+                    });
+                    $("#btnCreateAccount").unbind("click").bind("click", function(event) {
+                        console.log("BUTTON CREATE ACCOUNT is CLICKED");
+                        mobileData.createUser();
+                    });
                 });
             </script>
-    </head>
-    <body style="display: none;">
     		<!--application UI goes here-->
-        <input id="btnGetItem" name="btnGetItem" type="button" value="Get Item">
-            <input id="btnAskWatson" name="btnAskWatson" ng-click="askWatson_QuestionAnswer()" type="button" value="Ask Watson">
+            <!-- LOGIN PAGE -->
         <div data-role="page" id="pageLogin">
             <div data-role="content">
-                <div style="padding-left:100px; padding-top:100px">
+                <div style="padding-left:150px; padding-top:100px">
                     <img src="images/cox-automotive-logo.jpg">
                     </div>
-                <div class="col-md-6" style="padding-left:400px">
+                <div class="col-md-6" style="padding-left:450px">
                     <form>
-                        <input class="form-control" id="txtLogin" name="txtLogin" placeholder="Enter your username" type="text">
-                            <input id="txtPassword" name="txtPassword" placeholder="Enter your password" type="password">
-                            <input class="btn btn-primary" id="btnLogin" type="button" value="Sign In">
+                        <div class="form-group">
+                            <label>Username</label>
+                                <input class="form-control" id="txtLogin" name="txtLogin" placeholder="Enter your username" type="text">    
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                                <input id="txtPassword" name="txtPassword" placeholder="Enter your password" type="password">
+                        </div>
+                        <div id="signInAlert" style="display: none">
+                                Login failed. Please enter the correct username/password.
+                            </div>
+                        <div class="form-group">
+                            <input class="btn btn-primary" id="btnSignIn" type="button" value="Sign In">
+                                <a data-transition="slide" href="#pageCreateAccount">Create Account</a>    
+                        </div>
                     </form>
                 </div>
-            </div>                
+            </div>
+        </div>
+        <div data-role="page" id="pageUserProfile">
+            <div data-role="header">
+            </div>
+            <div data-role="content">
+                    User Profile
+                </div>
+            <div data-position="fixed" data-role="footer">
+            </div>
+        </div>
+            <!-- USER LANDING PAGE -->
+        <div data-role="page" id="pageUserDashboard">
+            <div data-role="header">
+            </div>
+            <div data-role="content">
+                    User landing page
+                </div>
+            <div data-position="fixed" data-role="footer">
+                <a class="ui-btn ui-icon-home ui-btn-icon-left" href="#pageUserDashboard">Home</a>
+            </div>
+        </div>
+            <!-- SIGN UP PAGE -->
+        <div data-role="page" data-theme="b" id="pageCreateAccount">
+            <div data-role="content">
+                <h3>Create New Account</h3>
+                <div>
+                    <form action="" method="">
+                        <div data-role="fieldcontain">
+                            <label for="username">Username: </label>
+                                <input id="username" name="username" type="text">
+                                <!--<span ng-show="userExists" style="color: red">Username already exists</span>-->
+                        </div>
+                        <div data-role="fieldcontain">
+                            <label for="password">Password: </label>
+                                <input id="password" name="password" type="text">
+                        </div>
+                        <div>
+                            <label for="firstname">Firstname: </label>
+                                <input id="firstname" name="firstname" type="text">
+                        </div>
+                        <div>
+                            <label for="lastname">Lastname: </label>
+                                <input id="lastname" name="lastname" type="text">
+                        </div>
+                        <div>
+                            <fieldset data-role="controlgroup">
+                                <legend>Select user type:</legend>
+                                    <input checked id="type-consumer" name="type" type="radio" value="Consumer">
+                                    <label for="type-consumer">Consumer</label>
+                                    <input id="type-dealership" name="type" type="radio" value="Dealership">
+                                    <label for="type-dealership">Dealership</label>
+                            </fieldset>  
+                        </div>
+                        <div>
+                            <input id="btnCreateAccount" type="button" value="Create Account">
+                                <!--<span ng-show="userCreated">User is created</span>-->
+                        </div>
+                    </form> 
+                </div>
+            </div>
+            <div data-position="fixed" data-role="footer">
+                <a class="ui-btn ui-icon-home ui-btn-icon-left" href="#pageLogin">Home</a>
+            </div>
         </div>
     </body>
 </html>

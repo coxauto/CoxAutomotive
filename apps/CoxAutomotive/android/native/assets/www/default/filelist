@@ -8,13 +8,11 @@
 /images/splash.png
 /images/thumbnail.png
 /index.html
-/js/app.js
-/js/controllers/ItemController.js
 /js/initOptions.js
 /js/main.js
 /js/messages.js
 /js/mobileData.js
-/js/services/ItemService.js
+/js/watsonServices.js
 /lib/angular-resource.js
 /lib/angular-route.js
 /lib/angular.js

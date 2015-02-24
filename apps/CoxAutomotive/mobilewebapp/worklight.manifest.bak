@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Created: 2015-02-23 03:45:37 UTC
+# Created: 2015-02-24 15:40:17 UTC
 # Modifying this file is possible only when the Cache Manifest value in the application descriptor is set to "Managed by user"
 css/main.css
 filelist
@@ -14,13 +14,11 @@ images/logo-cai-400x160.png
 images/splash.png
 images/thumbnail.png
 index.html
-js/app.js
-js/controllers/ItemController.js
 js/initOptions.js
 js/main.js
 js/messages.js
 js/mobileData.js
-js/services/ItemService.js
+js/watsonServices.js
 lib/IBMBluemix.js
 lib/IBMData.js
 lib/angular-resource.js
